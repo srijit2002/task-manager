@@ -108,3 +108,4 @@ const PromptCard = styled.article`
   }
 `;
 export default Prompt;
+export{PromptWrapper}

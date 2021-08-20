@@ -1,6 +1,5 @@
 import React, { useEffect} from "react";
 import SearchPanel from "../components/SearchPanel";
-import ChatPanel from "../components/ChatPanel";
 import Sidebar from "../components/Sidebar";
 import TaskPanel from "../components/TaskPanel";
 import styled from "styled-components";
@@ -9,9 +8,11 @@ import Prompt from "../utils/Prompt";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useGlobalAppContext } from "../reducer/context";
+import UserDetailsUpdate from "../utils/UserDetailsUpdate";
+
 
 const Home = () => {
-  const { dispatch } = useGlobalAppContext();
+  const { dispatch,_id } = useGlobalAppContext();
   const history = useHistory();
 
   useEffect(() => {
@@ -37,17 +38,17 @@ const Home = () => {
       }
     };
 
-    getLocalStorage();
-  }, [dispatch,history]);
+    (!_id)&&getLocalStorage();
+  }, [dispatch,history,_id]);
   return (
     <HomeWrapper>
       <Prompt />
+      <UserDetailsUpdate/>
       <TaskPopup />
       <SearchPanel />
       <Sidebar />
       <TaskPanel />
-      <ChatPanel />
-    </HomeWrapper>
+      </HomeWrapper>
   );
 };
 const HomeWrapper = styled.section`
@@ -58,9 +59,9 @@ const HomeWrapper = styled.section`
   min-height: 100vh;
   grid-template-areas:
     "sidebar searchPanel searchPanel"
-    "sidebar taskPanel chatPanel";
+    "sidebar taskPanel taskPanel";
 
-  grid-gap: 1.5em;
+  grid-gap: 1em;
   padding: 1em;
   max-height: 100vh;
 `;

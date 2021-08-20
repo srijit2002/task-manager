@@ -23,7 +23,8 @@ const CalenderWrapper=styled.article`
     border-radius: 0.2em;
   }
   .react-calendar__tile{
-    padding:0.5em;
+    padding:0.4em;
+    font-size: 0.8rem;
   }
   .react-calendar__navigation{
     margin-bottom:0.4em;
@@ -42,6 +43,12 @@ const CalenderWrapper=styled.article`
     background-color: #fff;
 }
 }
-
+.react-calendar__month-view__weekdays {
+  font-size: 0.62em;
+}
+.react-calendar__navigation__label__labelText--from{
+  font-size: 0.7rem;
+  font-weight: 700;
+}
 `;
 export default ReactCalender;

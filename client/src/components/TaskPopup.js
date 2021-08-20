@@ -1,9 +1,9 @@
-import React,{useState,useEffect} from "react";
+import React,{useState} from "react";
 import styled from "styled-components";
 import { useGlobalAppContext } from "../reducer/context";
 import axios from "axios"
 const TaskPopup = () => {
-  const { tasks,isTaskPopupOpen, taskMode, dispatch,_id,currentTaskId} = useGlobalAppContext();
+  const {isTaskPopupOpen, taskMode, dispatch,_id} = useGlobalAppContext();
   const closeTaskPopup = (e) => {
     e.preventDefault();
     dispatch({ type: "CLOSE__TASK__POPUP" });
@@ -141,6 +141,9 @@ const TaskPopupWrapper = styled.section`
         outline-color: var(--clr-secondary);
       }
     }
+  }
+  input{
+    font-family: var(--ff-primary);
   }
 `;
 export default TaskPopup;

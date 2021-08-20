@@ -75,6 +75,32 @@ img{
     }
 }
 
+//React masonry library
+.my-masonry-grid {
+  display: flex;
+  justify-content:space-between;
+  margin-left: -30px; /* gutter size offset */
+  width: auto;
+  padding-left:2em;
+ 
+}
+.my-masonry-grid_column {
+  background-clip: padding-box;
+  margin-right: 1.1em;
+}
+
+/* Style your items */
+.my-masonry-grid_column > article { /* change div to reference your elements you put in <Masonry> */
+ margin:0 2em 2em 0;
+}
+.my-masonry-grid_column:nth-last-col(){ /* change div to reference your elements you put in <Masonry> */
+ margin-right:0;
+}
+
+
+
+
+
 `;
 
 

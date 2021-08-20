@@ -38,7 +38,7 @@ const Task = ({ _id, details, dueDate, isCompleted, roomCode, title }) => {
   }
 
   return (
-    <TaskWrapper className={(isCompleted)&&`completed`} style={{order:(isCompleted)?4:-1}}>
+    <TaskWrapper className={(isCompleted)&&`completed`}>
       <div className="task__details">
         <h2 className="task__heading">
           {title}
@@ -49,7 +49,7 @@ const Task = ({ _id, details, dueDate, isCompleted, roomCode, title }) => {
           <button className="btn">
             {isCompleted ? `Mark as uncompleted` : `Mark as completed`}
           </button>
-          <button className="btn btn--secondary">View progress</button>
+         
         </div>
       </div>
 
@@ -67,22 +67,25 @@ const Task = ({ _id, details, dueDate, isCompleted, roomCode, title }) => {
 };
 const TaskWrapper = styled.article`
   background-color: var(--clr-secondary-bg);
-  min-width: 35ch;
+  max-width:45ch;
+  min-width:28ch;
   padding: 1.5em;
   position: relative;
   border-radius: 0.5em;
   display: flex;
+  flex:1;
   justify-content: space-between;
   align-items: flex-start;
   flex-direction: column;
   height: fit-content;
   box-shadow:0 0 10px 3px #d7d7d7;
+
   .icon__container {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     position: absolute;
-    top: 10%;
+    bottom:20px;
     right: 7%;
     button {
       margin: 0 0.2em;
@@ -92,6 +95,7 @@ const TaskWrapper = styled.article`
 
       &--edit {
         color: #2cf72c;
+        margin: 0;
       }
       &--delete {
         color: #f57070;
@@ -110,6 +114,8 @@ const TaskWrapper = styled.article`
     color: #a0a3b0;
     margin: 0.5em 0;
     line-height: 1.3;
+    word-wrap: break-word;
+    word-break: break-all;
   }
   .btn {
     background-color: #ffe1d194;
@@ -147,4 +153,4 @@ const TaskWrapper = styled.article`
 
 `;
 export default Task;
-// #2cf72c
+

@@ -122,6 +122,7 @@ const FormWrapper = styled.article`
   align-items: center;
   padding: 5em 4em;
   border-radius: 0.2em;
+  box-shadow:0 0 10px 3px #d7d7d7;
   .page__img {
     width:50%;
     max-width: 350px;

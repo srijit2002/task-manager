@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useEffect} from 'react'
 import styled from "styled-components"
 import { useGlobalAppContext } from '../reducer/context'
 
@@ -14,7 +14,7 @@ const Alert = () => {
         return () => {
            clearInterval(alertInterval)
         }
-    }, [isErrorModelOpen,errorMessage,typeOfAlert])
+    }, [isErrorModelOpen,errorMessage,typeOfAlert,dispatch])
     return (
         <AlertWrapper type={typeOfAlert} style={{display:(isErrorModelOpen)?"block":"none",backgroundColor:(typeOfAlert==="success")?successColor:dangerColor}}>
            {errorMessage}

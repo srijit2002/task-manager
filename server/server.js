@@ -8,12 +8,6 @@ const connectDatabase=require("./database/mongoose")
 require("dotenv").config()
 const server = http.createServer(app);
 
-// const io = require("socket.io")(server, {
-//   cors: {
-//     origin: "http://localhost:3000",
-//     methods: ["GET", "POST"]
-//   }
-// });
 
 // Middlewares
 app.use(cors({origin: "*",}))
@@ -21,16 +15,6 @@ app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use("/api/v1",router)
 
-
-
-
-// Socket.io functions
-
-// io.on("connection", (socket) => {
-//   socket.on("join-chat-room", (name) => {
-//     socket.broadcast.emit("new-user-joined", name);
-//   });
-// });
 
 const connectToServerAndDatabase=async()=>{
   try {

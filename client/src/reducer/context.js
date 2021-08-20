@@ -14,7 +14,6 @@ const AppProvider=({children})=>{
         _id:"",
         userOccupation:"",
         tasks:[],
-        filteredTasks:[],
         totalCompletedTasks:0,
         isErrorModelOpen:false,
         errorMessage:"",
@@ -24,7 +23,7 @@ const AppProvider=({children})=>{
         isPromptOpen:false,
         promptMessage:"",
         idOfDeleteTask:"",
-        
+        isUserUpdateModelOpen:false
     }
     const [state, dispatch] = useReducer(reducer, initialState)
     const value={

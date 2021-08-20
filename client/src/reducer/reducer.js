@@ -19,6 +19,12 @@ const reducer=(state,action)=>{
     else if(action.type==="CLOSE__TASK__POPUP"){
        return {...state,isTaskPopupOpen:false}
     }
+    else if(action.type==="OPEN__USER__UPDATE__MODEL"){
+      return {...state,isUserUpdateModelOpen:true}
+   }
+    else if(action.type==="CLOSE__USER__UPDATE__MODEL"){
+       return {...state,isUserUpdateModelOpen:false}
+    }
     else if(action.type==="OPEN__TASK__POPUP"){
        return {...state,isTaskPopupOpen:true,taskMode:action.payload}
     }
@@ -37,8 +43,8 @@ const reducer=(state,action)=>{
     else if(action.type==="EDIT__TASKS"){
        return {...state,isTaskPopupOpen:false,tasks:action.payload, isErrorModelOpen:true,errorMessage:"Task edited successfully",typeOfAlert:"success"}
     }
-    else if(action.type==="FILTER__TASKS"){
-       return {...state,tasks:action.payload}
+   else if(action.type==="UPDATE__USER"){
+       return {...state,...action.payload,isErrorModelOpen:true,errorMessage:"You details edited successfully",typeOfAlert:"success",isUserUpdateModelOpen:false}
     }
 }
 

@@ -8,7 +8,7 @@ import Person from "../images/person.svg";
 import { useGlobalAppContext } from "../reducer/context";
 
 const Sidebar = () => {
-  const { userName, userOccupation, tasks } = useGlobalAppContext();
+  const { userName, userOccupation, tasks,dispatch } = useGlobalAppContext();
   const [totalCompletedTasks, setTotalCompletedTasks] = useState(0);
   const [taskPercent, setTaskPercent] = useState(0);
   useEffect(() => {
@@ -17,18 +17,20 @@ const Sidebar = () => {
       isCompleted && totalCompleted++;
     });
     setTotalCompletedTasks(totalCompleted);
-    const percent=(totalCompletedTasks/tasks.length)*100;
-   setTaskPercent(percent)
-  }, [tasks,totalCompletedTasks]);
+    const percent = (totalCompletedTasks / tasks.length) * 100;
+    setTaskPercent(percent);
+  }, [tasks, totalCompletedTasks]);
 
   return (
     <SidebarWrapper className="panel">
       <div className="user">
         <img src={Person} alt="" className="user__img" />
-        <button className="btn">
-          <FaUserEdit />
-        </button>
-        <h1 className="user__name">{userName}</h1>
+        <h1 className="user__name">
+          {userName}
+          <button className="btn" onClick={()=>dispatch({type:"OPEN__USER__UPDATE__MODEL"})}>
+            <FaUserEdit />
+          </button>
+        </h1>
         <h2 className="user__occupation">{userOccupation}</h2>
         <div className="user__details">
           <div className="user__achievements">
@@ -37,7 +39,7 @@ const Sidebar = () => {
               <span>
                 {totalCompletedTasks}
                 <br />
-              </span>{" "}
+              </span>
               completed
             </p>
           </div>
@@ -45,13 +47,14 @@ const Sidebar = () => {
             <IoListCircleOutline className="icon icon--total" />
             <p>
               <span>
-                {tasks.length}<br />
-              </span>{" "}
+                {tasks.length}
+                <br />
+              </span>
               total
             </p>
           </div>
         </div>
-        <BarChart taskPercent={taskPercent}/>
+        <BarChart taskPercent={taskPercent} />
       </div>
       <div className="calender">
         <Calender />
@@ -73,19 +76,17 @@ const SidebarWrapper = styled.aside`
     align-items: center;
     position: relative;
     .btn {
-      position: absolute;
-      top: 39%;
-      right: 6%;
-      transform: translate(-50%, -50%);
-      background-color: #fff;
-      font-size: 1.5rem;
-      color: var(--clr-secondary);
-      padding: 0.3em;
-      border-radius: 50%;
-      border: 2px solid var(--clr-secondary);
-      display: grid;
-      place-items: center;
+      font-size: 1rem;
+      display: inline;
+      margin: 0;
+      color:#ff9761;
+      cursor:pointer;
+      margin-left:0.5em;
+      &:hover{
+        color:var(--clr-secondary);
+      }
     }
+
     &__img {
       width: 80px;
       height: 80px;
@@ -106,7 +107,6 @@ const SidebarWrapper = styled.aside`
     &__details {
       display: flex;
       flex: 1;
-
       padding: 0.3em 0.1em;
       border-radius: 0.4em;
       background-color: var(--clr-primary-bg);
@@ -119,10 +119,9 @@ const SidebarWrapper = styled.aside`
         height: 3ch;
         border-radius: 50%;
         padding: 0.15em;
-        &--total{
+        &--total {
           padding: 0.05em;
         }
-       
       }
     }
     &__tasks,
@@ -147,11 +146,10 @@ const SidebarWrapper = styled.aside`
       border-left: 2px solid #d1d5e0;
     }
   }
-
 `;
 const BarChart = styled.div`
   position: relative;
-  width: 80%;
+  width:90%;
   height: 0.4rem;
   background-color: var(--clr-primary-bg);
   margin-top: 1em;
@@ -164,7 +162,9 @@ const BarChart = styled.div`
     left: 0;
     height: 100%;
     background-color: var(--clr-secondary);
-    width:${({taskPercent})=>{return `${taskPercent}%`}}
+    width: ${({ taskPercent }) => {
+      return `${taskPercent}%`;
+    }};
   }
 `;
 export default Sidebar;
