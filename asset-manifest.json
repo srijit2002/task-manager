@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.js": "/task-manager/static/js/main.f5b12080.chunk.js",
+    "main.js.map": "/task-manager/static/js/main.f5b12080.chunk.js.map",
+    "runtime-main.js": "/task-manager/static/js/runtime-main.8a40d0e7.js",
+    "runtime-main.js.map": "/task-manager/static/js/runtime-main.8a40d0e7.js.map",
+    "static/css/2.8cebfa1f.chunk.css": "/task-manager/static/css/2.8cebfa1f.chunk.css",
+    "static/js/2.9639f8e7.chunk.js": "/task-manager/static/js/2.9639f8e7.chunk.js",
+    "static/js/2.9639f8e7.chunk.js.map": "/task-manager/static/js/2.9639f8e7.chunk.js.map",
+    "index.html": "/task-manager/index.html",
+    "static/css/2.8cebfa1f.chunk.css.map": "/task-manager/static/css/2.8cebfa1f.chunk.css.map",
+    "static/js/2.9639f8e7.chunk.js.LICENSE.txt": "/task-manager/static/js/2.9639f8e7.chunk.js.LICENSE.txt",
+    "static/media/login.740c4321.svg": "/task-manager/static/media/login.740c4321.svg",
+    "static/media/no-task.0a45ce8d.svg": "/task-manager/static/media/no-task.0a45ce8d.svg",
+    "static/media/person.10a463b7.svg": "/task-manager/static/media/person.10a463b7.svg",
+    "static/media/register.6304090f.svg": "/task-manager/static/media/register.6304090f.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.8a40d0e7.js",
+    "static/css/2.8cebfa1f.chunk.css",
+    "static/js/2.9639f8e7.chunk.js",
+    "static/js/main.f5b12080.chunk.js"
+  ]
+}
