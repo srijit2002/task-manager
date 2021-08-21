@@ -1,7 +1,6 @@
-import {createGlobalStyle} from "styled-components"
+import { createGlobalStyle } from "styled-components";
 
-
-const GlobalStyle=createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
 *{
     margin:0;
     padding:0;
@@ -60,6 +59,7 @@ abbr[title] {
   opacity:0;
   user-select:none;
   pointer-events:none;
+  overflow: hidden;
 }
 .hide__component{
   transform:translateY(100%);
@@ -82,7 +82,7 @@ img{
   margin-left: -30px; /* gutter size offset */
   width: auto;
   padding-left:2em;
- 
+ width:100%;
 }
 .my-masonry-grid_column {
   background-clip: padding-box;
@@ -97,11 +97,18 @@ img{
  margin-right:0;
 }
 
-
+.page__wrapper{
+  position: absolute;
+  width:100vw;
+  height:100vh;
+  z-index:10;
+  display: grid;
+  place-items: center;
+  background-color:rgba(0 0 0/0.7);
+}
 
 
 
 `;
 
-
-export default GlobalStyle
+export default GlobalStyle;

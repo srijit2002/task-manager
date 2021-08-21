@@ -1,6 +1,8 @@
 const bcrypt=require("bcryptjs");
 const userModel=require("../models/UserModel");
-const {transporter,mailOptions}=require("../auth/nodemailer");
+const tokenModel = require("../models/Token");
+const crypto = require("crypto");
+const {sendVerificationEmail}=require("../auth/nodemailer")
 
 const createUser=async(req,res)=>{
     try {
@@ -11,17 +13,21 @@ const createUser=async(req,res)=>{
         if(prevInstance) throw new Error("This email already exists, try with a different one or sign in")
         
         // configuring nodemailer options and changing sender email address
-        const configuredMailOptions={...mailOptions,to:email}
+        if (!email) throw new Error("NO email found");
+        await tokenModel.findOneAndDelete({ email });
+        const newToken = crypto.randomBytes(32).toString("hex");
+        await tokenModel.create({ email, token: newToken });
+        await sendVerificationEmail(newToken, email);
         
         //hashing password for security reasons
         const bcryptSalt=await bcrypt.genSalt();
         const enCryptedPassword=await bcrypt.hash(password,bcryptSalt);
-        const {email:userEmail,name:userName,occupation:userOccupation,tasks,totalCompletedTasks,_id}=await userModel.create({name,email,password:enCryptedPassword,occupation});
+        const {email:userEmail,name:userName,occupation:userOccupation,tasks,totalCompletedTasks,_id,isVerified}=await userModel.create({name,email,password:enCryptedPassword,occupation});
         //configurig email and if some thing fails
         //show error and stop authentication
         //create new mail options and add user name to it
-        res.status(201).json({success:true,message:"New user created successfully",data:{userEmail,userName,userOccupation,tasks,totalCompletedTasks,_id}})
-        await transporter.sendMail(configuredMailOptions);
+        res.status(201).json({success:true,message:"New user created successfully",data:{isVerified,userEmail,userName,userOccupation,tasks,totalCompletedTasks,_id}})
+        
     } catch (error) {
         res.status(401).json({message:error?.message||"Some error occured"})
     }
@@ -33,8 +39,8 @@ const getUser=async(req,res)=>{
         const prevInstance=await userModel.findOne({email})
         if(!prevInstance) throw new Error("You don't have any account associated with this email. Try to create a new account")
         if(await bcrypt.compare(password,prevInstance.password)){
-            const {name:userName,email:userEmail,_id,occupation:userOccupation,tasks,totalCompletedTasks}=prevInstance;
-            res.status(200).json({success:true,message:"Signed in successfully",data:{userEmail,userName,userOccupation,tasks,totalCompletedTasks,_id}})
+            const {name:userName,email:userEmail,_id,occupation:userOccupation,tasks,totalCompletedTasks,isVerified}=prevInstance;
+            res.status(200).json({success:true,message:"Signed in successfully",data:{isVerified,userEmail,userName,userOccupation,tasks,totalCompletedTasks,_id}})
         }
         else{
             throw new Error("Email or password does not match")

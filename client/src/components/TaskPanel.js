@@ -7,17 +7,15 @@ import Masonry from "react-masonry-css";
 
 const Taskpanel = () => {
   const { tasks } = useGlobalAppContext();
-
-
-
-  const breakPoints={
+ const breakPoints={
       default:3,
       1098:2,
-      838:1
-
+      816:1
   }
+
   return (
     <TaskPanelWrapper className={tasks.length === 0 && `panel`}>
+     
       {tasks.length === 0 && (
         <img
           className="noTaskImage"
@@ -58,7 +56,7 @@ const TaskPanelWrapper = styled.main`
     top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width:40%;
+    width:30%;
     min-width:25ch;
   }
   .noTaskTitle {
@@ -69,7 +67,8 @@ const TaskPanelWrapper = styled.main`
     padding: 0.5em;
     color: var(--clr-secondary-bg);
     width: 100%;
-    font-size: clamp(0.5rem,1.4vw,2rem);
+    font-size: clamp(1rem,1.4vw,2rem);
   }
+  
 `;
 export default Taskpanel;

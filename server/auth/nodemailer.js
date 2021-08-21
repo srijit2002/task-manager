@@ -1,5 +1,4 @@
 const nodemailer=require("nodemailer");
-const path=require("path")
 require("dotenv").config()
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -16,7 +15,15 @@ const mailOptions = {
   html: `Thanks for using team-manager,we are pleased to have you with us`
 };
 
-module.exports={transporter,mailOptions};
-// transporter.sendMail(mailOptions, function (err, info) {
-//  console.log(err);
-// });
+const verificationMailOptions={
+  from: 'teammanager2021bysrijit@gmail.com',
+  to: "srijitm906@gmail.com",
+  subject: `Verify Email`,
+  html: ``
+}
+const sendVerificationEmail=async(token,email)=>{
+  const newHtmlBody=`Thanks for using team-manager. click this <a href="http://localhost:8000/api/v1/user/verify-email/${token}">link</a> to verify your email, if this was not you simply ignore this email`
+  const modifiedOptions={...verificationMailOptions,html:newHtmlBody,to:email}
+  await transporter.sendMail(modifiedOptions)
+}
+module.exports={transporter,mailOptions,sendVerificationEmail};

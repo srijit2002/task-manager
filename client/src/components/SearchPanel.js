@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { HiOutlinePlusSm } from "react-icons/hi";
-import { CgBell } from "react-icons/cg";
-import { Link, useHistory } from "react-router-dom";
+import { Link} from "react-router-dom";
+import {GiHamburgerMenu} from "react-icons/gi"
 import { useGlobalAppContext } from "../reducer/context";
 const SearchPanel = () => {
-  const history = useHistory();
-  const { dispatch, _id } = useGlobalAppContext();
+  
+  const { dispatch, _id,isVerified } = useGlobalAppContext();
 
 
   const openTaskPopup = () => {
@@ -18,38 +18,38 @@ const SearchPanel = () => {
           typeOfAlert: "danger",
         },
       });
-    } else {
+    } 
+    else if(!isVerified){
+      dispatch({
+        type: "OPEN_MODEL",
+        payload: {
+          errorMessage: "A verification email has been sent to your email address, please verify it, if you already then reload the page",
+          typeOfAlert: "danger",
+        },
+      });
+    }
+    else {
       dispatch({ type: "OPEN__TASK__POPUP", payload: "Create" });
     }
   };
 
-  const handleRedirect = () => {
-    if (_id.length === 0) {
-      history.push("/signin");
-    } else {
-      localStorage.clear("team-manager");
-      dispatch({ type: "LOG__OUT" });
-      history.push("/signin");
-    }
-  };
+ 
   return (
     <SearchPanelWrapper className="panel">
       <header className="icon__bar">
+      <Link to="/sidebar" className="sidebar__link"><GiHamburgerMenu/></Link>
         <div className="create__new__task">
           <h2 className="create__new__task__heading">Create task</h2>
           <button className="icon__bar__btn" onClick={openTaskPopup}>
             <HiOutlinePlusSm />
           </button>
         </div>
-        <div className="icon__bar__notification">
-          <CgBell className="icon__bar__icon" />
-          <h4 className="icon__bar__counter">.</h4>
-        </div>
+       
       </header>
       <nav className="auth__links">
-        <button className="nav__link" onClick={handleRedirect}>
-          {_id.length === 0 ? `Sign in` : `Sign out`}
-        </button>
+        <Link to="/signin" className="nav__link">
+          Sign in
+        </Link>
         <Link className="nav__link nav__link--secondary" to="/register">
           Create Account
         </Link>
@@ -69,11 +69,7 @@ const SearchPanelWrapper = styled.header`
     display: flex;
     justify-content: center;
     align-items: center;
-    &__notification {
-      position: relative;
-      display: grid;
-      place-items: center;
-    }
+   
    
     &__btn {
       padding: 0.2em;
@@ -90,25 +86,16 @@ const SearchPanelWrapper = styled.header`
       &:hover {
         background-color: var(--clr-secondary);
       }
+      @media(max-width:426px){
+        font-size: 0.7rem;
+        
+      }
     }
     &__icon {
       font-size: 1.2rem;
       cursor: pointer;
     }
-    &__counter {
-      position: absolute;
-      top: 0;
-      left: 10px;
-      background-color: var(--clr-secondary);
-      padding: 0.3em;
-      border-radius: 50%;
-      width: 2px;
-      height: 2px;
-      font-size: 1rem;
-      color: var(--clr-secondary-bg);
-      font-weight: 100;
-      border: 1px solid #fff;
-    }
+   
   }
   .create__new__task {
     display: flex;
@@ -121,6 +108,10 @@ const SearchPanelWrapper = styled.header`
     &__heading {
       font-size: 0.9rem;
       font-weight: 500;
+      @media(max-width:426px){
+        font-weight: 300;
+        font-size: 0.7rem;
+      }
     }
   }
   .nav__link {
@@ -132,6 +123,7 @@ const SearchPanelWrapper = styled.header`
       padding: 0.5em;
       background-color: #ffe1d194;
       border-radius: 0.2em;
+      text-align: center;
       &:hover {
         background-color: #ffddca;
       }
@@ -142,10 +134,23 @@ const SearchPanelWrapper = styled.header`
           background-color: #ceffe8;
         }
       }
+      @media(max-width:426px){
+        font-size: 0.7rem;
+      }
     }
     .auth__links{
       display: flex;
     }
+    .sidebar__link{
+      margin:0 0.5em;
+      color: var(--clr-secondary);
+      @media(min-width:694px){
+        display:none;
+      }
+    }
+    @media(max-width:426px){
+       padding:0.3em;
+      }
 `;
 
 export default SearchPanel;

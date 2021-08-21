@@ -23,7 +23,8 @@ const AppProvider=({children})=>{
         isPromptOpen:false,
         promptMessage:"",
         idOfDeleteTask:"",
-        isUserUpdateModelOpen:false
+        isUserUpdateModelOpen:false,
+        isVerified:false
     }
     const [state, dispatch] = useReducer(reducer, initialState)
     const value={

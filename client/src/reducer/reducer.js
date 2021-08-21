@@ -6,15 +6,13 @@ const reducer=(state,action)=>{
         return {...state,isErrorModelOpen:true,errorMessage:action.payload.errorMessage,typeOfAlert:action.payload.typeOfAlert}
     }
     else if(action.type==="REGISTER__USER"){
-        const {tasks,totalCompletedTasks,userEmail,userName,userOccupation,_id}=action.payload;
-        return {...state,tasks,totalCompletedTasks,userEmail,userName,userOccupation,_id,isErrorModelOpen:true,errorMessage:"Account created successfully",typeOfAlert:"success"}
+        const {tasks,totalCompletedTasks,userEmail,userName,userOccupation,_id,isVerified}=action.payload;
+        return {...state,tasks,isVerified,totalCompletedTasks,userEmail,userName,userOccupation,_id,isErrorModelOpen:true,errorMessage:"Account created successfully",typeOfAlert:"success"}
     }
     else if(action.type==="SIGNIN__USER"){
-        const {tasks,totalCompletedTasks,userEmail,userName,userOccupation,_id}=action.payload;
-        return {...state,tasks,totalCompletedTasks,userEmail,userName,userOccupation,_id,isErrorModelOpen:true,errorMessage:"Signed in successfully",typeOfAlert:"success"}
-    }
-    else if(action.type==="LOG__OUT"){
-       return {...state,tasks:[],totalCompletedTasks:0,userEmail:"",userName:"",userOccupation:"",_id:"",isErrorModelOpen:true,errorMessage:"Logged out successfully",typeOfAlert:"success"}
+        const {tasks,totalCompletedTasks,isVerified,userEmail,userName,userOccupation,_id}=action.payload;
+        
+        return {...state,tasks,isVerified,totalCompletedTasks,userEmail,userName,userOccupation,_id,isErrorModelOpen:true,errorMessage:"Signed in successfully",typeOfAlert:"success"}
     }
     else if(action.type==="CLOSE__TASK__POPUP"){
        return {...state,isTaskPopupOpen:false}

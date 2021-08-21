@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Link,useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import RegisterImage from "../images/register.svg";
 import { useGlobalAppContext } from "../reducer/context";
-import axios from "axios";
+import instance from "../axios";
 
 const Register = () => {
   const { dispatch } = useGlobalAppContext();
@@ -11,30 +11,27 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [job, setJob] = useState("");
-  const [disabled,setDisabled]=useState(false)
-  const history=useHistory()
+
+  const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setDisabled(true)
       const userModel = { name, email, password, occupation: job };
-      const newUser = await axios.post(
-        "http://localhost:8000/api/v1/user/register",
-        userModel
-      );
-      history.push("/")
-      setDisabled(false)
-      localStorage.setItem("team-manager",JSON.stringify([email,password]))
-      dispatch({type:"REGISTER__USER",payload:newUser.data.data})
-      
-    
+      const newUser = await instance.post("/api/v1/user/register", userModel);
+      history.push("/");
+      dispatch({ type: "REGISTER__USER", payload: newUser.data.data });
     } catch (error) {
-      console.log(error?.response.data.message);
-      setDisabled(false)
-      dispatch({type:"OPEN_MODEL",payload:{errorMessage:error?.response.data.message,typeOfAlert:"danger"}})
+      console.log(error?.response?.data?.message);
+
+      dispatch({
+        type: "OPEN_MODEL",
+        payload: {
+          errorMessage: error?.response?.data?.message||"Some error occured",
+          typeOfAlert: "danger",
+        },
+      });
     }
-    
   };
 
   return (
@@ -91,7 +88,7 @@ const Register = () => {
                 className="form__occupation"
               />
             </div>
-            <Button type="submit" className="form__btn" disabled={disabled}>
+            <Button type="submit" className="form__btn">
               Create Account
             </Button>
             <Link to="/" className="form__btn form__btn--secondary">
@@ -122,37 +119,55 @@ const FormWrapper = styled.article`
   align-items: center;
   padding: 5em 4em;
   border-radius: 0.2em;
-  box-shadow:0 0 10px 3px #d7d7d7;
+  box-shadow: 0 0 10px 3px #d7d7d7;
+  @media (max-width: 694px) {
+    padding: 4em 2em;
+  }
   .page__img {
-    width:50%;
+    width: 50%;
     max-width: 350px;
-    display: inline-block;
+    @media (max-width: 694px) {
+      display: none;
+    }
   }
   .page__details {
     background-color: var(--clr-secondary-bg);
     flex: 1;
+    @media (max-width: 694px) {
+      display: grid;
+      place-items: center;
+    }
   }
   .page__heading {
     font-size: 2rem;
     margin-bottom: 0.3em;
+    @media (max-width: 694px) {
+      font-size: 1.5rem;
+    }
   }
 `;
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+
   .form__inputs {
     display: flex;
     flex-direction: column;
-    flex:1;
-    input,textarea {
+    flex: 1;
+    input,
+    textarea {
+      min-width: 20ch;
       font-family: var(--ff-primary);
       font-size: 1.1rem;
       padding: 0.4em;
       margin: 0.3em 0;
       width: 100%;
       border: 1px solid;
-      &:focus{
+      &:focus {
         outline-color: var(--clr-secondary);
+      }
+      @media (max-width: 694px) {
+        min-width: 15ch;
       }
     }
   }

@@ -6,9 +6,12 @@ import { GiAchievement } from "react-icons/gi";
 import Calender from "./ReactCalender";
 import Person from "../images/person.svg";
 import { useGlobalAppContext } from "../reducer/context";
+import { Link } from "react-router-dom";
+import {FaArrowAltCircleLeft} from "react-icons/fa"
+
 
 const Sidebar = () => {
-  const { userName, userOccupation, tasks,dispatch } = useGlobalAppContext();
+  const { userName, userOccupation, tasks,dispatch ,_id,isVerified } = useGlobalAppContext();
   const [totalCompletedTasks, setTotalCompletedTasks] = useState(0);
   const [taskPercent, setTaskPercent] = useState(0);
   useEffect(() => {
@@ -21,13 +24,38 @@ const Sidebar = () => {
     setTaskPercent(percent);
   }, [tasks, totalCompletedTasks]);
 
+  const openTaskPopup = () => {
+    if (_id.length === 0) {
+      dispatch({
+        type: "OPEN_MODEL",
+        payload: {
+          errorMessage: "To edit your details, you need to log in first",
+          typeOfAlert: "danger",
+        },
+      });
+    } 
+    else if(!isVerified){
+      dispatch({
+        type: "OPEN_MODEL",
+        payload: {
+          errorMessage: "A verification email has been sent to your email address, please verify it, if you already then reload the page",
+          typeOfAlert: "danger",
+        },
+      });
+    }
+    else {
+      dispatch({ type: "OPEN__USER__UPDATE__MODEL"});
+    }
+  };
+
   return (
     <SidebarWrapper className="panel">
+      <Link to="/" className="sidebar__link"><FaArrowAltCircleLeft/></Link>
       <div className="user">
         <img src={Person} alt="" className="user__img" />
         <h1 className="user__name">
           {userName}
-          <button className="btn" onClick={()=>dispatch({type:"OPEN__USER__UPDATE__MODEL"})}>
+          <button className="btn" onClick={()=>openTaskPopup()}>
             <FaUserEdit />
           </button>
         </h1>
@@ -54,7 +82,7 @@ const Sidebar = () => {
             </p>
           </div>
         </div>
-        <BarChart taskPercent={taskPercent} />
+          <BarChart taskPercent={taskPercent} />
       </div>
       <div className="calender">
         <Calender />
@@ -65,10 +93,20 @@ const Sidebar = () => {
 
 const SidebarWrapper = styled.aside`
   grid-area: sidebar;
-  display: flex;
+  display:flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   padding: 2em 1em;
+  .sidebar__link{
+    position: absolute;
+    top:10px;
+    color:var(--clr-secondary);
+    font-size: 1.2rem;
+    @media(min-width:694px){
+      display:none;
+    }
+  }
   .user {
     display: flex;
     flex-direction: column;
@@ -111,7 +149,7 @@ const SidebarWrapper = styled.aside`
       border-radius: 0.4em;
       background-color: var(--clr-primary-bg);
       margin-top: 0.8em;
-
+    
       .icon {
         font-size: 1rem;
         background-color: var(--clr-secondary-bg);
@@ -146,6 +184,7 @@ const SidebarWrapper = styled.aside`
       border-left: 2px solid #d1d5e0;
     }
   }
+ 
 `;
 const BarChart = styled.div`
   position: relative;
@@ -155,6 +194,7 @@ const BarChart = styled.div`
   margin-top: 1em;
   border-radius: 3em;
   overflow: hidden;
+
   &::before {
     content: "";
     position: absolute;

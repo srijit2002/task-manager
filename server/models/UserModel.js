@@ -19,9 +19,9 @@ const userSchema=new mongoose.Schema({
         type:[taskSchema],
         default:[]
     },
-    totalCompletedTasks:{
-        type:Number,
-        default:0
+    isVerified:{
+        type:Boolean,
+        default:false
     },
     occupation:{
         type:String,
@@ -29,4 +29,4 @@ const userSchema=new mongoose.Schema({
     }
 })
 
-module.exports=mongoose.model("USER",userSchema)
+module.exports=mongoose.model("user",userSchema)

@@ -1,8 +1,7 @@
 import React,{useState} from "react";
 import styled from "styled-components";
 import { useGlobalAppContext } from "../reducer/context";
-import axios from "axios"
-
+import instance from "../axios"
 
 const Prompt = () => {
   const { dispatch, isPromptOpen,idOfDeleteTask,_id:userId } =useGlobalAppContext();
@@ -14,8 +13,8 @@ const Prompt = () => {
   const deleteTask = async () => {
     setDisabled(true)
     try {
-      const allTasks = await axios.delete(
-        `http://localhost:8000/api/v1/task/${userId}`,
+      const allTasks = await instance.delete(
+        `/api/v1/task/${userId}`,
         { data: { taskId:idOfDeleteTask} }
       );
       dispatch({ type: "DELETE__TASKS", payload: allTasks.data });

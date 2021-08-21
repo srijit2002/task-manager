@@ -1,54 +1,26 @@
-import React, { useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import SearchPanel from "../components/SearchPanel";
 import Sidebar from "../components/Sidebar";
 import TaskPanel from "../components/TaskPanel";
 import styled from "styled-components";
-import TaskPopup from "../components/TaskPopup";
 import Prompt from "../utils/Prompt";
-import axios from "axios";
-import { useHistory } from "react-router-dom";
-import { useGlobalAppContext } from "../reducer/context";
-import UserDetailsUpdate from "../utils/UserDetailsUpdate";
+
+
 
 
 const Home = () => {
-  const { dispatch,_id } = useGlobalAppContext();
-  const history = useHistory();
-
+  const [width,setWidth]=useState(window.innerWidth)
   useEffect(() => {
-    const getLocalStorage = async () => {
-      try {
-        const [email, password] = JSON.parse(
-          localStorage.getItem("team-manager")
-        );
-        if (email && password) {
-          const userModel = { email, password };
-          const newUser = await axios.post(
-            "http://localhost:8000/api/v1/user/signin",
-            userModel
-          );
-          history.push("/");
-          dispatch({ type: "SIGNIN__USER", payload: newUser.data.data });
-         
-        } else {
-          history.push("/register");
-        }
-      } catch (error) {
-        history.push("/register");
-      }
-    };
+    setWidth(window.innerWidth);
+  }, [])
 
-    (!_id)&&getLocalStorage();
-  }, [dispatch,history,_id]);
   return (
     <HomeWrapper>
-      <Prompt />
-      <UserDetailsUpdate/>
-      <TaskPopup />
+      <Prompt/>
       <SearchPanel />
-      <Sidebar />
+     {(width>694)&&<Sidebar/>}
       <TaskPanel />
-      </HomeWrapper>
+    </HomeWrapper>
   );
 };
 const HomeWrapper = styled.section`
@@ -64,5 +36,10 @@ const HomeWrapper = styled.section`
   grid-gap: 1em;
   padding: 1em;
   max-height: 100vh;
+  @media(max-width:694px){
+    grid-template-areas:
+    "searchPanel searchPanel searchPanel"
+    "taskPanel taskPanel taskPanel";
+  }
 `;
 export default Home;

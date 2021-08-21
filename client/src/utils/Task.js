@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { useGlobalAppContext } from "../reducer/context";
-import axios from "axios";
+import instance from "../axios";
 import { GrCompliance } from "react-icons/gr";
 import { Link } from "react-router-dom";
 
@@ -16,7 +16,7 @@ const Task = ({ _id, details, dueDate, isCompleted, roomCode, title }) => {
         Difference_In_Time / (1000 * 3600 * 24)
       );
       setTaskDueDate(
-        isNaN(Difference_In_Days) ? dueDate :(Difference_In_Days<0)?`Due date was ${Math.abs(Difference_In_Days)} day before`:`${Difference_In_Days} days left`
+        isNaN(Difference_In_Days) ? dueDate :(Difference_In_Days<0)?`Due date was ${Math.abs(Difference_In_Days)} day(s) before`:`${Difference_In_Days} days left`
       );
     };
     getDateLeft();
@@ -29,7 +29,7 @@ const Task = ({ _id, details, dueDate, isCompleted, roomCode, title }) => {
   const toggleComplete=async()=>{
      const oldTask={_id, details, dueDate, isCompleted:!isCompleted, roomCode, title};
     try {
-      const newTasks=await axios.patch(`http://localhost:8000/api/v1/task/${userId}`,oldTask)
+      const newTasks=await instance.patch(`/api/v1/task/${userId}`,oldTask)
       dispatch({type:"EDIT__TASKS",payload:newTasks.data})
     } catch (error) {
       console.log(error.response);
@@ -67,8 +67,6 @@ const Task = ({ _id, details, dueDate, isCompleted, roomCode, title }) => {
 };
 const TaskWrapper = styled.article`
   background-color: var(--clr-secondary-bg);
-  max-width:45ch;
-  min-width:28ch;
   padding: 1.5em;
   position: relative;
   border-radius: 0.5em;
@@ -79,7 +77,8 @@ const TaskWrapper = styled.article`
   flex-direction: column;
   height: fit-content;
   box-shadow:0 0 10px 3px #d7d7d7;
-
+  width:100%;
+  min-width:25ch;
   .icon__container {
     display: flex;
     justify-content: flex-end;

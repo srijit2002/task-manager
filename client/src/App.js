@@ -7,7 +7,9 @@ import Signin from "./pages/Signin";
 import { AppProvider } from "./reducer/context";
 import Alert from "./components/Alert";
 import SingleTask from "./pages/SingleTask";
-
+import Sidebar from "./components/Sidebar";
+import TaskPopup from "./components/TaskPopup";
+import UserDetailsUpdate from "./utils/UserDetailsUpdate";
 const App = () => {
  
 
@@ -18,8 +20,10 @@ const App = () => {
       <AppProvider>
         <Router>
           <Alert />
+          <UserDetailsUpdate/>
           <Switch>
             <Route exact path="/">
+              <TaskPopup/>
               <Home />
             </Route>
             <Route path="/register">
@@ -30,6 +34,9 @@ const App = () => {
             </Route>
             <Route path="/task/:taskId">
               <SingleTask />
+            </Route>
+            <Route path="/sidebar">
+              <Sidebar/>
             </Route>
           </Switch>
         </Router>

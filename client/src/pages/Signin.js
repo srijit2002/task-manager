@@ -3,7 +3,7 @@ import SigninImage from "../images/login.svg";
 import { Button, Form, FormWrapper, PageWrapper } from "./Register";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
+import instance from "../axios";
 import { useGlobalAppContext } from "../reducer/context";
 const Signin = () => {
   const { dispatch } = useGlobalAppContext();
@@ -11,18 +11,15 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [disabled, setDisabled] = useState(false);
+
   const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setDisabled(true);
+    
     try {
       const userModel = { email, password };
-      const newUser = await axios.post(
-        "http://localhost:8000/api/v1/user/signin",
-        userModel
-      );
+      const newUser = await instance.post("/api/v1/user/signin", userModel);
       dispatch({ type: "SIGNIN__USER", payload: newUser.data.data });
       history.push("/");
     } catch (error) {
@@ -34,9 +31,8 @@ const Signin = () => {
           typeOfAlert: "danger",
         },
       });
-    } 
+    }
   };
- 
   return (
     <PageWrapper>
       <FormWrapper>
@@ -73,7 +69,7 @@ const Signin = () => {
                 className="form__password"
               />
             </div>
-            <Button type="submit" className="form__btn" disabled={disabled}>
+            <Button type="submit" className="form__btn">
               Sign in
             </Button>
             <Link to="/" className="form__btn form__btn--secondary">

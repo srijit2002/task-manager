@@ -1,149 +1,158 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useGlobalAppContext } from "../reducer/context";
-import axios from "axios"
+import instance from "../axios";
+import { Form,Button} from "../pages/Register";
 const TaskPopup = () => {
-  const {isTaskPopupOpen, taskMode, dispatch,_id} = useGlobalAppContext();
+  const { isTaskPopupOpen, taskMode, dispatch, _id } = useGlobalAppContext();
   const closeTaskPopup = (e) => {
     e.preventDefault();
     dispatch({ type: "CLOSE__TASK__POPUP" });
   };
-  const [title,setTitle]=useState("")
-  const [details,setDetails]=useState("")
-  const [date,setDate]=useState("")
-  const[disabled,setDisabled]=useState(false)
-  const createTask=async(e)=>{
-      e.preventDefault()
-      setDisabled(true)
-      const year=date.slice(0,4);
-      const month=date.slice(5,7);
-      const day=date.slice(8,11);
-      const dueDate=new Date(`${month}/${day}/${year}`).getTime();
-      const newTask={title,details,dueDate}
-      try {
-        const allTasks=await axios.post(`http://localhost:8000/api/v1/task/${_id}`,newTask)
-        dispatch({type:"ADD__TASKS",payload:allTasks.data.data});
-      } catch (error) {
-        dispatch({type:"OPEN_MODEL",payload:{errorMessage:error?.response.data.message,typeOfAlert:"danger"}})
-      }
-      finally{
-        setDisabled(false)
-      }
-     
-  }
+  const [title, setTitle] = useState("");
+  const [details, setDetails] = useState("");
+  const [date, setDate] = useState("");
+  const [disabled, setDisabled] = useState(false);
+  const createTask = async (e) => {
+    e.preventDefault();
+    setDisabled(true);
+    const year = date.slice(0, 4);
+    const month = date.slice(5, 7);
+    const day = date.slice(8, 11);
+    const dueDate = new Date(`${month}/${day}/${year}`).getTime();
+    const newTask = { title, details, dueDate };
+    try {
+      const allTasks = await instance.post(`/api/v1/task/${_id}`, newTask);
+      dispatch({ type: "ADD__TASKS", payload: allTasks.data.data });
+    } catch (error) {
+      dispatch({
+        type: "OPEN_MODEL",
+        payload: {
+          errorMessage: error?.response.data.message,
+          typeOfAlert: "danger",
+        },
+      });
+    } finally {
+      setDisabled(false);
+    }
+  };
 
   return (
-    <TaskPopupWrapper className={!isTaskPopupOpen && `hide__wrapper`}>
-      <form className={!isTaskPopupOpen ? `hide__component` : `task`} onSubmit={createTask}>
-        <div className="task__header">
+    <div className={(!isTaskPopupOpen)?`page__wrapper hide__wrapper`:`page__wrapper`}>
+      <TaskCard>
+      <Form className={!isTaskPopupOpen ? `hide__component` : `form`} onSubmit={createTask}>
+        <div className="form__inputs">
+          <label htmlFor="title">Title of the task</label>
           <input
-            type="text"
+            id="title"
             className="task__title"
+            type="text"
             placeholder="Title of task"
             required
-            value={title||""}
-            onChange={e=>setTitle(e.target.value)}
+            value={title || ""}
+            onChange={(e) => setTitle(e.target.value)}
           />
+        </div>
+        <div className="form__inputs">
+          <label htmlFor="date">Due date of the task</label>
+          <input
+            className="task__due-date"
+            type="date"
+            id="date"
+            value={date || ""}
+            onChange={(e) => setDate(e.target.value)}
+          />
+        </div>
+        <div className="form__inputs">
+          <label htmlFor="details">Description of the task</label>
+          <textarea
+            id="details"
+            className="task__details"
+            placeholder="Details about task"
+            value={details || ""}
+            onChange={(e) => setDetails(e.target.value)}
+          />
+        </div>
 
-          <input type="date" id="date" className="task__date" value={date||""} onChange={e=>setDate(e.target.value)}/>
-        </div>
-        <textarea className="task__details" placeholder="Details about task" value={details||""} onChange={e=>setDetails(e.target.value)} />
-        <div className="task__button__wrapper">
-          <button type="submit" className="btn btn--primary" disabled={disabled}>
+        {/* this is a button wrapper */}
+        <div className="button__wrapper">
+          <Button
+            className="btn btn--primary"
+            type="submit"
+            disabled={disabled}
+          >
             {taskMode}
-          </button>
-          <button className="btn btn--secondary" onClick={closeTaskPopup}>
+          </Button>
+          <Button className="btn btn--secondary" onClick={closeTaskPopup}>
             Cancel
-          </button>
+          </Button>
         </div>
-      </form>
-    </TaskPopupWrapper>
+      </Form>
+      </TaskCard>
+    </div>
   );
 };
 
-const TaskPopupWrapper = styled.section`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0 0 0/0.7);
-  z-index: 3;
-  transition: transform 300ms;
+const TaskCard = styled.article`
+  width:70vw;
+  max-width: 600px;
+  background-color: var(--clr-secondary-bg);
+  padding: 3em;
+  min-height: 80vh;
+  border-radius: 0.2em;
+  min-width:280px;
+  label {
+    font-size: 0.8rem;
+    @media (max-width: 694px) {
+      font-size:0.6rem;
+    }
+  }
+  .form {
+    input,textarea {
+    @media (max-width: 694px) {
+      font-size:0.8rem;
+    }
+  }
+    &__inputs:nth-child(even) {
+      margin: 0.7em 0;
+    }
+  }
 
-  .task {
-    position: absolute;
-    top: 10%;
-    left: 8%;
-    right: 8%;
-    bottom: 0;
-    background-color: var(--clr-secondary-bg);
-    border-radius: 0.2em;
+  .button__wrapper {
     display: flex;
-    flex-direction: column;
-    padding: 2em;
-    transition: transform 300ms ease-out;
-    transition-delay: 200ms;
-
-    &__header {
-      display: flex;
-    }
-    &__title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      padding: 0.3em;
-      flex: 1;
-      &:focus {
-        outline-color: var(--clr-secondary);
-      }
-    }
-    &__details {
-      flex: 1;
-      resize: none;
-      font-size: 1.5rem;
-      font-weight: 700;
-      padding: 0.3em;
-      &:focus {
-        outline-color: var(--clr-secondary);
-      }
-    }
-    &__button__wrapper {
-      display: flex;
-      margin-top: 0.5em;
-      .btn {
-        font-size: 1rem;
-        padding: 0.3em 0.5em;
-        margin: 0;
-        border-radius: 0.1em;
-        min-width: 6ch;
-
-        font-weight: 100;
-       
-        &--primary {
-          margin-right:1em;
-          background-color: #f98e57;
-          color: var(--clr-secondary-bg);
-          &:hover {
-          background-color: var(--clr-secondary);
-        }
-        }
-        &--secondary {
-          border: 2px solid #f98e57;
-          color:#f98e57;
-          &:hover {
-          color: var(--clr-secondary);
-        }
+    .btn {
+      font-size: 1rem;
+      padding: 0.3em 0.75em;
+      min-width: 8ch;
+      transition: all 350ms;
+      &--primary {
+        margin-right: 1em;
+        &:hover {
+          filter: saturate(90%);
         }
       }
-    }
-    &__date {
-      &:focus {
-        outline-color: var(--clr-secondary);
+      &--secondary {
+        color: var(--clr-secondary);
+        background-color: transparent;
+        background-color: var(--clr-primary-bg);
+        &:hover {
+          filter: brightness(102%);
+        }
       }
+      @media (max-width: 694px) {
+      font-size:0.8rem;
+    }
     }
   }
-  input{
-    font-family: var(--ff-primary);
+  .task__details {
+    height: 20vw;
+    min-height: 200px;
+    resize: none;
   }
+
+  @media (max-width: 694px) {
+    padding: 1.5em;
+  }
+ 
 `;
 export default TaskPopup;

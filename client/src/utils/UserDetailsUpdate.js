@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Form, Button } from "../pages/Register";
 import { useGlobalAppContext } from "../reducer/context";
-import axios from "axios";
+import instance from "../axios";
 
 const UserDetailsUpdate = () => {
   const {
@@ -28,7 +28,7 @@ const UserDetailsUpdate = () => {
   const updateUserDate = async (e) => {
     e.preventDefault();
     try {
-      const updatedUser=await axios.patch(`http://localhost:8000/api/v1/user/${_id}`,{name,email,occupation});
+      const updatedUser=await instance.patch(`/api/v1/user/${_id}`,{name,email,occupation});
       const {name:userName,email:userEmail,occupation:userOccupation}=updatedUser.data;
       dispatch({type:"UPDATE__USER",payload:{userName,userEmail,userOccupation}})
     } catch (error) {
@@ -114,15 +114,23 @@ const UserDetailsUpdateWrapper = styled.section`
   z-index: 5;
   display: grid;
   place-items: center;
+  overflow:hidden ;
   .userUpdateCard {
     width: 40vw;
     max-width: 400px;
     padding: 2em;
     border-radius: 0.3em;
     background-color: var(--clr-secondary-bg);
-    transform: translateY(-25%);
     label {
       font-size: 0.8rem;
+    }
+    @media(max-width:694px){
+      width: 75vw;
+        max-width:700px;
+    }
+    @media(max-width:400px){
+      width:95vw;
+      max-width:700px;
     }
     .button__wrapper {
       display: flex;
@@ -146,6 +154,7 @@ const UserDetailsUpdateWrapper = styled.section`
           }
         }
       }
+    
     }
     .form__inputs {
       display: flex;
@@ -185,5 +194,6 @@ const UserDetailsUpdateWrapper = styled.section`
       background-color: var(--clr-secondary);
     }
   }
+ 
 `;
 export default UserDetailsUpdate;
