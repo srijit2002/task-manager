@@ -23,7 +23,7 @@ const verifyEmail=async(req,res)=>{
         const {email}=await tokenModel.findOne({token});
         if(!email) throw new Error("Your token has expired, resend verification email");
         await userModel.findOneAndUpdate({email},{isVerified:true});
-        res.status(200).send("<h1>Email successfully verified, now sign in to your account</h1>")
+        res.status(200).send(`<h1>Email successfully verified, now <a href="https://task-manager-dashboard.herokuapp.com/">Sign in</a> to your account</h1>`)
     } catch (error) {
          res.status(500).send(error?.message || "Some error occured");
     }

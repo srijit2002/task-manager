@@ -22,7 +22,7 @@ const verificationMailOptions={
   html: ``
 }
 const sendVerificationEmail=async(token,email)=>{
-  const newHtmlBody=`Thanks for using team-manager. click this <a href="http://localhost:8000/api/v1/user/verify-email/${token}">link</a> to verify your email, if this was not you simply ignore this email`
+  const newHtmlBody=`Thanks for using team-manager. click this <a href="https://task-manager-dashboard.herokuapp.com/api/v1/user/verify-email/${token}">link</a> to verify your email, if this was not you simply ignore this email`
   const modifiedOptions={...verificationMailOptions,html:newHtmlBody,to:email}
   await transporter.sendMail(modifiedOptions)
 }
