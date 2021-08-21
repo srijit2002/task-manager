@@ -11,10 +11,12 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [job, setJob] = useState("");
-
+  const [disabled,setDisabled]=useState(false)
   const history = useHistory();
 
   const handleSubmit = async (e) => {
+    setDisabled(state=> !state)
+    setDisabled(true)
     e.preventDefault();
     try {
       const userModel = { name, email, password, occupation: job };
@@ -22,7 +24,8 @@ const Register = () => {
       history.push("/");
       dispatch({ type: "REGISTER__USER", payload: newUser.data.data });
     } catch (error) {
-      console.log(error?.response?.data?.message);
+      setDisabled(state=> !state)
+      console.log(error?.response);
 
       dispatch({
         type: "OPEN_MODEL",
@@ -32,6 +35,7 @@ const Register = () => {
         },
       });
     }
+    
   };
 
   return (
@@ -88,7 +92,7 @@ const Register = () => {
                 className="form__occupation"
               />
             </div>
-            <Button type="submit" className="form__btn">
+            <Button type="submit" className="form__btn" disabled={disabled}>
               Create Account
             </Button>
             <Link to="/" className="form__btn form__btn--secondary">

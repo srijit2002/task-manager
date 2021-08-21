@@ -11,6 +11,7 @@ const SingleTask = () => {
   const [taskdetails, setTaskDetails] = useState("");
   const [taskDueDate, setTaskDueDate] = useState("");
   const { tasks, _id: userId, dispatch } = useGlobalAppContext();
+  const [disabled,setDisabled]=useState(false)
   const { taskId } = useParams();
   const history = useHistory();
   const redirectToHomePage = (e) => {
@@ -35,6 +36,7 @@ const SingleTask = () => {
 
   const saveEditedTask = async (e) => {
     e.preventDefault();
+    setDisabled(state=> !state)
     const [{ roomCode, _id, isCompleted }] = tasks.filter(
       (task) => task._id === taskId
     );
@@ -58,6 +60,7 @@ const SingleTask = () => {
       history.push("/");
       if (newTasks) dispatch({ type: "EDIT__TASKS", payload: newTasks.data });
     } catch (error) {
+      setDisabled(state=> !state)
       dispatch({
         type: "OPEN_MODEL",
         payload: {
@@ -103,7 +106,7 @@ const SingleTask = () => {
             />
           </div>
           <div className="button__wrapper">
-            <Button className="btn btn--primary" type="submit">
+            <Button className="btn btn--primary" type="submit" disabled={disabled}>
               Save
             </Button>
             <Button className="btn btn--secondary" onClick={redirectToHomePage}>

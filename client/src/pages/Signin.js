@@ -7,31 +7,33 @@ import instance from "../axios";
 import { useGlobalAppContext } from "../reducer/context";
 const Signin = () => {
   const { dispatch } = useGlobalAppContext();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [disabled,setDisabled]=useState(false)
 
 
   const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setDisabled(state=> !state)
     try {
       const userModel = { email, password };
       const newUser = await instance.post("/api/v1/user/signin", userModel);
       dispatch({ type: "SIGNIN__USER", payload: newUser.data.data });
       history.push("/");
     } catch (error) {
-      console.log(error?.response.data.message);
+      setDisabled(state=> !state)
+      console.log(error);
       dispatch({
         type: "OPEN_MODEL",
         payload: {
-          errorMessage: error?.response.data.message,
+          errorMessage: error?.response?.data?.message,
           typeOfAlert: "danger",
         },
       });
     }
+    
   };
   return (
     <PageWrapper>
@@ -69,7 +71,7 @@ const Signin = () => {
                 className="form__password"
               />
             </div>
-            <Button type="submit" className="form__btn">
+            <Button type="submit" className="form__btn" disabled={disabled}>
               Sign in
             </Button>
             <Link to="/" className="form__btn form__btn--secondary">

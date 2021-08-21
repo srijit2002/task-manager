@@ -32,7 +32,7 @@ const Task = ({ _id, details, dueDate, isCompleted, roomCode, title }) => {
       const newTasks=await instance.patch(`/api/v1/task/${userId}`,oldTask)
       dispatch({type:"EDIT__TASKS",payload:newTasks.data})
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
       dispatch({type:"OPEN_MODEL",payload:{errorMessage:error?.response?.data?.message||"Some error occured",typeOfAlert:"danger"}})
     }
   }

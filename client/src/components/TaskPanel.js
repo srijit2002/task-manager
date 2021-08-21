@@ -6,7 +6,7 @@ import NoTask from "../images/no-task.svg";
 import Masonry from "react-masonry-css";
 
 const Taskpanel = () => {
-  const { tasks } = useGlobalAppContext();
+  const { tasks,isVerified,_id } = useGlobalAppContext();
  const breakPoints={
       default:3,
       1098:2,
@@ -28,6 +28,7 @@ const Taskpanel = () => {
           You don't have any active task right now
         </h1>
       )}
+      {(!isVerified&&_id)&&<MiniAlert>Please verify your email address</MiniAlert>}
       <Masonry
         breakpointCols={breakPoints}
         className="my-masonry-grid"
@@ -71,4 +72,13 @@ const TaskPanelWrapper = styled.main`
   }
   
 `;
+const MiniAlert=styled.h2`
+  padding:0.5em 1em;
+  margin: 0.5em 0;
+  font-size: 1rem;
+  font-weight:200;
+  background-color:#f86d6d;
+  border-radius: 0.2em;
+  color:#fff;
+`
 export default Taskpanel;

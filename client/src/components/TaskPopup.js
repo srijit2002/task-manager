@@ -15,7 +15,7 @@ const TaskPopup = () => {
   const [disabled, setDisabled] = useState(false);
   const createTask = async (e) => {
     e.preventDefault();
-    setDisabled(true);
+    setDisabled(state=> !state)
     const year = date.slice(0, 4);
     const month = date.slice(5, 7);
     const day = date.slice(8, 11);
@@ -25,6 +25,7 @@ const TaskPopup = () => {
       const allTasks = await instance.post(`/api/v1/task/${_id}`, newTask);
       dispatch({ type: "ADD__TASKS", payload: allTasks.data.data });
     } catch (error) {
+      setDisabled(state=> !state)
       dispatch({
         type: "OPEN_MODEL",
         payload: {
@@ -32,8 +33,6 @@ const TaskPopup = () => {
           typeOfAlert: "danger",
         },
       });
-    } finally {
-      setDisabled(false);
     }
   };
 

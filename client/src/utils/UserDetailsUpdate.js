@@ -16,6 +16,7 @@ const UserDetailsUpdate = () => {
   const [name, setName] = useState(userName);
   const [email, setEmail] = useState(userEmail);
   const [occupation, setOccupation] = useState(userOccupation);
+  const [disabled, setDisabled] = useState(false);
   useEffect(() => {
     setEmail(userEmail);
     setName(userName);
@@ -28,10 +29,25 @@ const UserDetailsUpdate = () => {
   const updateUserDate = async (e) => {
     e.preventDefault();
     try {
-      const updatedUser=await instance.patch(`/api/v1/user/${_id}`,{name,email,occupation});
-      const {name:userName,email:userEmail,occupation:userOccupation}=updatedUser.data;
-      dispatch({type:"UPDATE__USER",payload:{userName,userEmail,userOccupation}})
+      setDisabled((state) => !state);
+      const updatedUser = await instance.patch(`/api/v1/user/${_id}`, {
+        name,
+        email,
+        occupation,
+      });
+      const {
+        name: userName,
+        email: userEmail,
+        occupation: userOccupation,
+      } = updatedUser.data;
+      setDisabled((state) => !state);
+
+      dispatch({
+        type: "UPDATE__USER",
+        payload: { userName, userEmail, userOccupation },
+      });
     } catch (error) {
+      setDisabled((state) => !state);
       dispatch({
         type: "OPEN_MODEL",
         payload: {
@@ -43,10 +59,7 @@ const UserDetailsUpdate = () => {
       });
     }
   };
-  useEffect(() => {
-    const prevInstance=JSON.parse(localStorage.getItem("team-manager"));
-    if(prevInstance)localStorage.setItem("team-manager", JSON.stringify([userEmail, prevInstance[1]]));
-  }, [userEmail]);
+
   return (
     <UserDetailsUpdateWrapper
       className={!isUserUpdateModelOpen && `hide__wrapper`}
@@ -73,6 +86,7 @@ const UserDetailsUpdate = () => {
         <div className="form__inputs">
           <label htmlFor="email">Your email address</label>
           <input
+            readOnly
             required
             type="email"
             id="email"
@@ -91,7 +105,11 @@ const UserDetailsUpdate = () => {
           />
         </div>
         <div className="button__wrapper">
-          <Button className="btn btn--primary" type="submit">
+          <Button
+            className="btn btn--primary"
+            type="submit"
+            disabled={disabled}
+          >
             Save
           </Button>
           <Button className="btn btn--secondary" onClick={redirectToHomePage}>
@@ -114,7 +132,7 @@ const UserDetailsUpdateWrapper = styled.section`
   z-index: 5;
   display: grid;
   place-items: center;
-  overflow:hidden ;
+  overflow: hidden;
   .userUpdateCard {
     width: 40vw;
     max-width: 400px;
@@ -124,13 +142,13 @@ const UserDetailsUpdateWrapper = styled.section`
     label {
       font-size: 0.8rem;
     }
-    @media(max-width:694px){
+    @media (max-width: 694px) {
       width: 75vw;
-        max-width:700px;
+      max-width: 700px;
     }
-    @media(max-width:400px){
-      width:95vw;
-      max-width:700px;
+    @media (max-width: 400px) {
+      width: 95vw;
+      max-width: 700px;
     }
     .button__wrapper {
       display: flex;
@@ -154,7 +172,6 @@ const UserDetailsUpdateWrapper = styled.section`
           }
         }
       }
-    
     }
     .form__inputs {
       display: flex;
@@ -168,9 +185,6 @@ const UserDetailsUpdateWrapper = styled.section`
         margin: 0.3em 0;
         width: 100%;
         border: 1px solid;
-        &:focus {
-          outline-color: var(--clr-secondary);
-        }
       }
     }
   }
@@ -194,6 +208,8 @@ const UserDetailsUpdateWrapper = styled.section`
       background-color: var(--clr-secondary);
     }
   }
- 
+  input:read-only {
+    background-color: var(--clr-primary-bg);
+  }
 `;
 export default UserDetailsUpdate;
